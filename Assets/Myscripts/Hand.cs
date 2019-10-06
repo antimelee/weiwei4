@@ -150,11 +150,12 @@ public class Hand : MonoBehaviour
         
         //Attach
         Rigidbody targetBOdy = m_CurrentInteractable.GetComponent<Rigidbody>();
-        targetBOdy.isKinematic = false;
+        targetBOdy.isKinematic = true;
         barposition = targetBOdy.transform.position;
         barrotation = targetBOdy.transform.rotation;
-        m_CurrentInteractable.ApplyOffset(transform);
-        m_Joint.connectedBody = targetBOdy;
+        //m_CurrentInteractable.ApplyOffset(transform);
+        //m_Joint.connectedBody = targetBOdy;
+        targetBOdy.transform.parent = transform;
         //Set active hand
         m_CurrentInteractable.m_ActiveHand = this;
         
@@ -174,8 +175,8 @@ public class Hand : MonoBehaviour
         targetBody.transform.position = barposition;
         targetBody.transform.rotation = barrotation;
         //Detach
-        m_Joint.connectedBody = null;
-
+        //m_Joint.connectedBody = null;
+        targetBody.transform.parent = null;
         //Clear
         m_CurrentInteractable.m_ActiveHand = null;
         m_CurrentInteractable = null;
