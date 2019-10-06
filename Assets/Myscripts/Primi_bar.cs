@@ -140,14 +140,13 @@ public class Primi_bar : MonoBehaviour
     public void CreateBase(Transform parent)
     {
         float width = 1f;
-        float height = 0.3f;
+        float height = 0.5f;
         GameObject bottom = GameObject.CreatePrimitive(PrimitiveType.Cube);
         bottom.name = "Base";
         bottom.transform.parent = parent;
         bottom.transform.localScale = new Vector3(width, height, width);//x,z of 1, y of 3
         bottom.transform.position = new Vector3((width / 2f), -(height / 2f), (width / 2f));//shuffle the center point by half x,y,z.
     }
-
 
     public void CreatePanes(Transform parent, float max, bool legoMode)
     {
@@ -360,6 +359,7 @@ public class Primi_bar : MonoBehaviour
         {
             cubeArray_country[year].tag = "Bar";
             cubeArray_year[year].tag = "Interactable";
+            
             for ( country = 0; country < 11; country++)
             {
                 Transform[] ts = cubeArray.transform.GetComponentsInChildren<Transform>(true);
@@ -390,7 +390,7 @@ public class Primi_bar : MonoBehaviour
         {
            cubeArray_year[country].tag = "Bar";
            cubeArray_country[country].tag = "Interactable";
-           for ( year = 0; year < 11; year++)
+            for ( year = 0; year < 11; year++)
           {
                 Transform[] ts = cubeArray.transform.GetComponentsInChildren<Transform>(true);
                 foreach (Transform t in ts) if (t.gameObject.name == (country.ToString() + "," + year.ToString()))
@@ -463,7 +463,7 @@ public class Primi_bar : MonoBehaviour
             cubeArray_year[i].transform.localScale = new Vector3(1, 2, barWidth);
             cubeArray_year[i].transform.position = new Vector3((float)0.5, 1 / 2, (1f / (maxLen)) * i);
             cubeArray_year[i].name = "Bars_year" + i.ToString();
-            cubeArray_year[i].AddComponent<BarCollision>();
+            //cubeArray_year[i].AddComponent<BarCollision>();
             cubeArray_year[i].GetComponent<MeshRenderer>().enabled = false;
             Rigidbody gameObjectsRigidBody = cubeArray_year[i].AddComponent<Rigidbody>(); // Add the rigidbody.
             gameObjectsRigidBody.mass = 5; // Set the mass to 5 via the Rigidbody.
@@ -473,12 +473,13 @@ public class Primi_bar : MonoBehaviour
 
         for (int i = 0; i < 11; i++)
         {
+            
             cubeArray_country[i] = GameObject.CreatePrimitive(PrimitiveType.Cube);
             cubeArray_country[i].transform.parent = (Vis.transform);
             cubeArray_country[i].transform.localScale = new Vector3(barWidth, 2, 1);
             cubeArray_country[i].transform.position = new Vector3((1f / (maxLen)) * i, 1/2, (float)0.5);
             cubeArray_country[i].name = "Bars_country"+ i.ToString();
-            cubeArray_country[i].AddComponent<BarCollision>();
+            //cubeArray_country[i].AddComponent<BarCollision>();
             cubeArray_country[i].GetComponent<MeshRenderer>().enabled = false;
             //make bar interactable
             Rigidbody gameObjectsRigidBody = cubeArray_country[i].AddComponent<Rigidbody>(); // Add the rigidbody.
@@ -513,6 +514,7 @@ public class Primi_bar : MonoBehaviour
                     string barName = country.ToString() + "," + year.ToString();
                     GameObject bar = CreateBar(cubeArray, barName, height, barWidth, xAxisPos, zAxisPos, max, legoMode);
                     bar.transform.parent = cubeArray.transform;
+                    
                 }
             }
         }
