@@ -15,12 +15,19 @@ public class Hand : MonoBehaviour
     private bool m_HasPosition = false;
     private bool m_IsTeleporting = false;
     private float m_FadeTime = 0.5f;
-    //my own staff
+
+    //related to showing question
+    private Questions.QuestionSet active_q;
+    private Questions q = new Questions(); // Get all the question strings
+    private char[] Order;
+    private string[] SortedQuestions = new string[6];
     public SteamVR_Action_Boolean m_gripAction = null;//press the side button to show question
     public GameObject QuestionText;//attached to the question text
     public GameObject Paper;
+    public int counter;
+    public string filename;
+    public StudyTracker Tracker;
 
-    
     private FixedJoint m_Joint = null;
     private SteamVR_Behaviour_Pose m_Pose = null;
     private Interactable m_CurrentInteractable = null;
@@ -87,8 +94,26 @@ public class Hand : MonoBehaviour
             //print(m_Pose.inputSource + "dismiss");
             dismiss();
         }
+        //keyboard input
+        if (Input.GetButtonDown("Fire3"))
+        {
+            ChangeQuestionText();
+        }
     }
 
+    void Start()
+    {
+        counter = 0;
+        filename = Tracker.filename;
+        /*Paper.GetComponent<MeshRenderer>().enabled = true;
+        QuestionText.GetComponent<MeshRenderer>().enabled = true;*/
+    }
+    void ChangeQuestionText()
+    {
+        Debug.Log(SortedQuestions[counter]);
+        QuestionText.GetComponent<TextMesh>().text = SortedQuestions[counter]; // change text from string[]
+        counter = counter < 5 ? counter + 1 : 0; //change counter to cycle through questions
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (!other.gameObject.CompareTag("Interactable"))
@@ -112,7 +137,8 @@ public class Hand : MonoBehaviour
     public void showup()//show question
     {
         QuestionText.GetComponent<MeshRenderer>().enabled = true;
-        m_CurrentInteractable=QuestionText.gameObject.GetComponent<Interactable>();
+        Paper.GetComponent<MeshRenderer>().enabled = true;
+        /*m_CurrentInteractable =QuestionText.gameObject.GetComponent<Interactable>();
         if (m_CurrentInteractable.m_ActiveHand)
             m_CurrentInteractable.m_ActiveHand.Drop();
         //change position,make the text with your controller
@@ -120,19 +146,20 @@ public class Hand : MonoBehaviour
         Rigidbody targetBody = m_CurrentInteractable.GetComponent<Rigidbody>();
         m_Joint.connectedBody = targetBody;
         //Set active hand
-        m_CurrentInteractable.m_ActiveHand = this;
+        m_CurrentInteractable.m_ActiveHand = this;*/
     }
 
     public void dismiss()//dismiss question
     {
         QuestionText.GetComponent<MeshRenderer>().enabled = false;
-        if (!m_CurrentInteractable)
+        Paper.GetComponent<MeshRenderer>().enabled = false;
+        /*if (!m_CurrentInteractable)
             return;
         m_Joint.connectedBody = null;
 
         //Clear
         m_CurrentInteractable.m_ActiveHand = null;
-        m_CurrentInteractable = null;
+        m_CurrentInteractable = null;*/
     }
 
     public void Pickup()
@@ -147,9 +174,11 @@ public class Hand : MonoBehaviour
             m_CurrentInteractable.m_ActiveHand.Drop();
         //position
         //m_CurrentInteractable.transform.position = transform.position;
-        
+
+        GameObject.Find("Vis_Barchart").GetComponent<Vis>().createVis.attachbars(m_CurrentInteractable.name);
         //Attach
         Rigidbody targetBOdy = m_CurrentInteractable.GetComponent<Rigidbody>();
+        //targetBOdy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
         targetBOdy.isKinematic = true;
         barposition = targetBOdy.transform.position;
         barrotation = targetBOdy.transform.rotation;
@@ -255,6 +284,80 @@ public class Hand : MonoBehaviour
 
         //if not a hit
         return false;
+    }
+
+    void ParseOrder(string input)
+    {
+        if (input.Length == 6)
+        {
+            Order = input.ToCharArray();
+            for (int i = 0; i < 6; i++)
+            {
+                if ((Order[i] == 'R') | (Order[i] == 'r'))
+                {
+                    SortedQuestions[i] = (i < 3) ? active_q.r1 : active_q.r2;
+                }
+                else if ((Order[i] == 'O') | (Order[i] == 'o'))
+                {
+                    SortedQuestions[i] = (i < 3) ? active_q.o1 : active_q.o2;
+                }
+                else if ((Order[i] == 'C') | (Order[i] == 'c'))
+                {
+                    SortedQuestions[i] = (i < 3) ? active_q.c1 : active_q.c2;
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Order is not equal to 6");
+        }
+    }
+
+    /// <summary> Sets the questions and filename, and finds the Question Board GameObjects
+    /// <remarks> Far from the best way to accomplish this, but it did the job</remarks>
+    /// </summary>
+	public void setQuestionTrigger(string name)
+    {
+        filename = name;//set the filename
+        GameObject Paper = GameObject.Find("Paper"); //get the paper object
+        GameObject Question = GameObject.Find("Question");//get the question text
+        Debug.Log(Paper);
+        switch (filename)//Just grab the one string[] based on filename
+        {
+            case "co2":
+                active_q = q.co2;
+                break;
+            case "education":
+                active_q = q.education;
+                break;
+            case "grosscapital":
+                active_q = q.grosscapital;
+                break;
+            case "health":
+                active_q = q.health;
+                break;
+            case "homicide":
+                active_q = q.homicide;
+                break;
+            case "suicide":
+                active_q = q.suicide;
+                break;
+            case "agriculturalland":
+                active_q = q.agriculturalland;
+                break;
+            case "military":
+                active_q = q.military;
+                break;
+            case "carmortality":
+                active_q = q.carmortality;
+                break;
+            default:
+                Debug.Log("No filename/ filename doesn't correspond to any 'Questions'.");
+                break;
+        }
+        Debug.Log("QO " + Tracker.QuestionOrder);
+        ParseOrder(Tracker.QuestionOrder);
+
     }
 }
 

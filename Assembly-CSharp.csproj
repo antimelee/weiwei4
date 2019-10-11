@@ -65,23 +65,36 @@
     <Compile Include="Assets\Myscripts\BarCollision.cs" />
     <Compile Include="Assets\Myscripts\ButtonTransitioner.cs" />
     <Compile Include="Assets\Myscripts\ButtonTransitioner2.cs" />
-    <Compile Include="Assets\Myscripts\ButtonTransitioner3.cs" />
-    <Compile Include="Assets\Myscripts\ButtonTransitioner4.cs" />
     <Compile Include="Assets\Myscripts\Hand.cs" />
     <Compile Include="Assets\Myscripts\HandAnimator.cs" />
-    <Compile Include="Assets\Myscripts\Input.cs" />
     <Compile Include="Assets\Myscripts\Interactable.cs" />
     <Compile Include="Assets\Myscripts\Pointer.cs" />
     <Compile Include="Assets\Myscripts\Primi_bar.cs" />
+    <Compile Include="Assets\Myscripts\Questions.cs" />
     <Compile Include="Assets\Myscripts\QuestionTrigger.cs" />
     <Compile Include="Assets\Myscripts\ReadCSV.cs" />
+    <Compile Include="Assets\Myscripts\StudyTracker.cs" />
     <Compile Include="Assets\Myscripts\Test.cs" />
+    <Compile Include="Assets\Myscripts\Timer.cs" />
     <Compile Include="Assets\Myscripts\Vis.cs" />
     <Compile Include="Assets\Myscripts\VR_Controller.cs" />
     <Compile Include="Assets\Myscripts\VRInputModule.cs" />
+    <Compile Include="Assets\Standard Shader Gallery\Scripts\MaterialSample.cs" />
+    <Compile Include="Assets\Standard Shader Gallery\Scripts\UIManager.cs" />
+    <Compile Include="Assets\Standard Shader Gallery\Standard Assets\Effects\ImageEffects\Scripts\ImageEffectBase.cs" />
+    <Compile Include="Assets\Standard Shader Gallery\Standard Assets\Effects\ImageEffects\Scripts\ImageEffects.cs" />
+    <Compile Include="Assets\Standard Shader Gallery\Standard Assets\Effects\ImageEffects\Scripts\PostEffectsBase.cs" />
+    <Compile Include="Assets\Standard Shader Gallery\Standard Assets\Effects\ImageEffects\Scripts\TiltShift.cs" />
+    <None Include="Assets\Standard Shader Gallery\Demigiant\DOTween\readme.txt" />
     <None Include="Assets\Resources\Shaders\3DText.shader" />
+    <None Include="Assets\Standard Shader Gallery\Shaders\PBR_Refraction.shader" />
+    <None Include="Assets\Resources\Shaders\TiltShiftHdrLensBlur.shader" />
+    <None Include="Assets\Standard Shader Gallery\Readme.txt" />
     <None Include="Assets\Resources\Shaders\3DTextHi.shader" />
     <None Include="Assets\Resources\Shaders\CustomTransparent.shader" />
+    <None Include="Assets\Standard Shader Gallery\Demigiant\DOTween\DOTween46.xml" />
+    <None Include="Assets\Standard Shader Gallery\Demigiant\DOTween\DOTween43.xml" />
+    <None Include="Assets\Standard Shader Gallery\Demigiant\DOTween\DOTween50.xml" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/weiwei2019/weiwei4/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
@@ -291,6 +304,18 @@
     </Reference>
     <Reference Include="System.Deployment">
       <HintPath>D:/weiwei2019/weiwei4/Assets/PLUGINS/System.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween">
+      <HintPath>D:/weiwei2019/weiwei4/Assets/Standard Shader Gallery/Demigiant/DOTween/DOTween.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween43">
+      <HintPath>D:/weiwei2019/weiwei4/Assets/Standard Shader Gallery/Demigiant/DOTween/DOTween43.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween46">
+      <HintPath>D:/weiwei2019/weiwei4/Assets/Standard Shader Gallery/Demigiant/DOTween/DOTween46.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween50">
+      <HintPath>D:/weiwei2019/weiwei4/Assets/Standard Shader Gallery/Demigiant/DOTween/DOTween50.dll</HintPath>
     </Reference>
     <Reference Include="Valve.Newtonsoft.Json">
       <HintPath>D:/weiwei2019/weiwei4/Assets/SteamVR/Input/Plugins/JSON.NET/Valve.Newtonsoft.Json.dll</HintPath>

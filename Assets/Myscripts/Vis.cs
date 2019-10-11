@@ -13,15 +13,16 @@ public class Vis : MonoBehaviour
     //public ReadCSV csv;//different with Teo`s readcsv,I read data in this script with the datatable format;
     [HideInInspector]
     public bool legoMode = true;
-    public QuestionTrigger qt;
-    public string filename;
+    public Hand qt;
+    private string filename;
+    public StudyTracker Tracker;
 
     [Range(0.01f, 100f)]
     public float MasterScale = 0.8f;
     [Range(0f, 100f)]
     public float spaceRatio = 2.5f;
 
-    private string[] filenames =
+    /*private string[] filenames =
         {"education.csv",
         "tax.csv",
         "suicide.csv",
@@ -34,27 +35,15 @@ public class Vis : MonoBehaviour
         "dependency.csv",
         "grosscapital.csv",
         "carmortality.csv",
-    };
+    };*/
 
-    void Awake()
+    void check_qt()
     {
-        string path = "Assets/CSV/" + filename;
-        DataTable mydata = OpenCSV(path);
-        List<List<object>> Data = new List<List<object>>();
-        for (int i = 0; i <= 10; i++)
+        if (qt != null)
         {
-            List<object> list = new List<object>();
-            for (int j = 0; j <= 10; j++)
-                list.Add(mydata.Rows[i][j]);
-                //print(mydata.Rows[i][j]);
-            Data.Add(list);
+            Debug.Log("check_qt" + filename);
+            qt.setQuestionTrigger(filename);
         }
-
-       createVis = new Primi_bar();
-        GameObject Vis = createVis.CreateChart(Data, MasterScale, spaceRatio,legoMode);
-        Vis.transform.localScale = new Vector3(MasterScale, MasterScale, MasterScale);
-        Vis.transform.localPosition = new Vector3(0, 1f, -MasterScale / 2f);//magic numbers galore! place in center of VR space
-        
     }
 
     public static DataTable OpenCSV(string filePath)//从csv读取数据返回table
@@ -205,6 +194,31 @@ public class Vis : MonoBehaviour
 
     void Start()
     {
+        //get filename
+        filename = Tracker.filename;
+
+        //Set filename for correct questions
+        //qt.setFilename(filename);
+
+        //initialize questions
+        check_qt();
+
+        string path = "Assets/CSV/" + filename+".csv";
+        DataTable mydata = OpenCSV(path);
+        List<List<object>> Data = new List<List<object>>();
+        for (int i = 0; i <= 10; i++)
+        {
+            List<object> list = new List<object>();
+            for (int j = 0; j <= 10; j++)
+                list.Add(mydata.Rows[i][j]);
+            //print(mydata.Rows[i][j]);
+            Data.Add(list);
+        }
+
+        createVis = new Primi_bar();
+        GameObject Vis = createVis.CreateChart(Data, MasterScale, spaceRatio, legoMode);
+        Vis.transform.localScale = new Vector3(MasterScale, MasterScale, MasterScale);
+        Vis.transform.localPosition = new Vector3(0, 1f, -MasterScale / 2f);//magic numbers galore! place in center of VR space
 
     }
 
