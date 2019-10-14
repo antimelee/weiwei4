@@ -32,7 +32,7 @@ public class Hand : MonoBehaviour
     private SteamVR_Behaviour_Pose m_Pose = null;
     private Interactable m_CurrentInteractable = null;
     private List<Interactable> m_ContactInteractables = new List<Interactable>();
-    
+    private bool isCountry = false;
     //my own staff
     [HideInInspector]
     Vector3 barposition = new Vector3();//record the position of bar which you pick up
@@ -164,7 +164,8 @@ public class Hand : MonoBehaviour
 
     public void Pickup()
     {
-            //Get nearest
+ 
+        //Get nearest
         m_CurrentInteractable = GetNearestInteractable();
         //Null check
         if (!m_CurrentInteractable)
@@ -175,9 +176,24 @@ public class Hand : MonoBehaviour
         //position
         //m_CurrentInteractable.transform.position = transform.position;
 
+        Transform[] ts = m_CurrentInteractable.transform.GetComponentsInChildren<Transform>(true);
+        foreach (Transform t in ts)
+        {
+        if (t.gameObject.name == "FloatCountries")
+            {
+                isCountry = true;
+            }
+            else if (t.gameObject.name == "FloatYears")
+            {
+                isCountry = false;
+            }
+        }
+        GameObject.Find("Vis_Barchart").GetComponent<Vis>().createVis.Showfloatelements(true, isCountry);
         GameObject.Find("Vis_Barchart").GetComponent<Vis>().createVis.attachbars(m_CurrentInteractable.name);
         //Attach
         Rigidbody targetBOdy = m_CurrentInteractable.GetComponent<Rigidbody>();
+
+        //below is the method that I want to freeze the specific motion axis of targetbody, but I failed
         //targetBOdy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
         targetBOdy.isKinematic = true;
         barposition = targetBOdy.transform.position;
@@ -203,6 +219,7 @@ public class Hand : MonoBehaviour
         targetBody.isKinematic = true;
         targetBody.transform.position = barposition;
         targetBody.transform.rotation = barrotation;
+        GameObject.Find("Vis_Barchart").GetComponent<Vis>().createVis.Showfloatelements(false, isCountry);
         //Detach
         //m_Joint.connectedBody = null;
         targetBody.transform.parent = null;

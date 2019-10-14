@@ -21,8 +21,12 @@ public class Primi_bar : MonoBehaviour
     //GameObject to hold all the bars, easier to see in inspector
     public GameObject cubeArray = new GameObject();
 
-    //floating tick text;
+    //floating tick text---value mark;
     public GameObject FloatTexts = new GameObject();
+    //floating country labels;
+    public GameObject Floatcountrylabels = new GameObject() { name = "FloatCountries" };
+    //floating yera labels;
+    public GameObject Floatyearlabels = new GameObject() { name = "FloatYears" };
 
     public float MAX;
     public string[] matNames = {   "White", //text color
@@ -298,6 +302,7 @@ public class Primi_bar : MonoBehaviour
         float line_Max = max; // find next highest multiple
         float numTicks = line_Max / multiple;
         FloatTexts.name = "FloatTexts";
+        FloatTexts.SetActive(false);
         FloatTexts.transform.parent = aParent.transform;
         //MeshRenderer gameObjectRenderer = FloatTexts.GetComponent<MeshRenderer>();
         //FloatTexts.GetComponent<MeshRenderer>().enabled = false;//make text invisible
@@ -375,8 +380,9 @@ public class Primi_bar : MonoBehaviour
     public void AttachYeartoHandler(int yearnumber)
     {
         int year, country;
+        //rebinding parent to cubearray
         FloatTexts.transform.parent = cubeArray.transform;
-        //erase parent relationship of Barcountry
+        Floatcountrylabels.transform.parent = cubeArray.transform;
         for (country = 0; country < 10; country++)
         {
             Transform[] ts = cubeArray_country[country].transform.GetComponentsInChildren<Transform>(true);
@@ -388,6 +394,7 @@ public class Primi_bar : MonoBehaviour
                     }
             }
         }
+        //find the choosed bars and attach them to cubeArray_year[year]
         year = yearnumber;
         for ( country = 0; country < 10; country++)
          {
@@ -397,16 +404,22 @@ public class Primi_bar : MonoBehaviour
                 t.gameObject.transform.parent = cubeArray_year[year].transform;
              }
          }
+
+        //below are some magic adjustion of value text position
         FloatTexts.transform.rotation = Quaternion.Euler(0, 90, 0);
         FloatTexts.transform.position = new Vector3(0.78f, 1f, 0.48f+0.08f*year);
         FloatTexts.transform.parent= cubeArray_year[year].transform;
+
+        Floatcountrylabels.transform.position= new Vector3(0f, 1f,  0.08f * year-0.3f);
+        Floatcountrylabels.transform.parent = cubeArray_year[year].transform;
     }
     //enable country to be interactable
     public void AttachCountrytoHandler(int countrynumber)
     {
         int year, country;
+        //rebinding parent to cubearray
         FloatTexts.transform.parent = cubeArray.transform;
-        //erase parent relationship of Baryear
+        Floatyearlabels.transform.parent = cubeArray.transform;
         for (year = 0; year < 10; year++)
         {
             Transform[] ts = cubeArray_year[year].transform.GetComponentsInChildren<Transform>(true);
@@ -418,6 +431,7 @@ public class Primi_bar : MonoBehaviour
                     }
             }
         }
+        //find the choosed bars and attach them to cubeArray_country[country]
         country = countrynumber;
           for ( year = 0; year < 10; year++)
           {
@@ -431,6 +445,32 @@ public class Primi_bar : MonoBehaviour
         FloatTexts.transform.rotation = Quaternion.Euler(0, 0, 0);
         FloatTexts.transform.position = new Vector3(-0.78f + 0.08f * country, 1f,0.4f);
         FloatTexts.transform.parent = cubeArray_country[country].transform;
+
+        Floatyearlabels.transform.position = new Vector3(0.08f+0.08f * country, 1f, -0.4f);
+        Floatyearlabels.transform.parent = cubeArray_country[country].transform;
+    }
+
+    /*
+     * control whether show or dismiss floating elements(labels, values)
+     */
+    public void Showfloatelements(bool isShow,bool isCountry)
+    {
+        if (isShow)
+        {
+            FloatTexts.SetActive(true);
+            if(isCountry)
+                Floatcountrylabels.SetActive(true);
+            else
+                Floatyearlabels.SetActive(true);
+        }
+        else
+        {
+            FloatTexts.SetActive(false);
+            if (isCountry)
+             Floatcountrylabels.SetActive(false);
+          else
+             Floatyearlabels.SetActive(false);
+        }
     }
 
     public void attachbars(string type)
@@ -544,6 +584,8 @@ public class Primi_bar : MonoBehaviour
         cubeArray.name = "Bars";
         cubeArray.transform.parent = (Vis.transform);
 
+        Floatyearlabels.transform.parent = cubeArray.transform;
+        Floatcountrylabels.transform.parent = cubeArray.transform;
         //Create floating ticks for pulling action;
         CreateFloatingTicks(max, cubeArray);
 
@@ -620,11 +662,17 @@ public class Primi_bar : MonoBehaviour
                 {
                     //Make the year labels
                     CreateAxisLabels(yearLabels, System.Convert.ToString(Input[country][year]), zAxisPos, true);
+                    //Make the dynamic year labels
+                    CreateAxisLabels(Floatyearlabels, System.Convert.ToString(Input[country][year]), zAxisPos, true);
+                    Floatyearlabels.SetActive(false);
                 }
                 else if (year == 0)
                 {
                     //Make the country labels
                     CreateAxisLabels(countryLabels, System.Convert.ToString(Input[country][year]), xAxisPos, false);
+                    //Make the dynamic year labels
+                    CreateAxisLabels(Floatcountrylabels, System.Convert.ToString(Input[country][year]), xAxisPos, false);
+                    Floatcountrylabels.SetActive(false);
                 }
                 else
                 {
@@ -633,7 +681,6 @@ public class Primi_bar : MonoBehaviour
                     string barName = country.ToString() + "," + year.ToString();
                     GameObject bar = CreateBar(cubeArray, barName, height, barWidth, xAxisPos, zAxisPos, max, legoMode);
                     bar.transform.parent = cubeArray.transform;
-                    
                 }
             }
         }
